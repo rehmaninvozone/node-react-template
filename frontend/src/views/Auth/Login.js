@@ -1,29 +1,38 @@
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import InputPasswordToggle from '@components/input-password-toggle'
 import {Button, Card, CardBody, CardText, CustomInput, Form, FormFeedback, FormGroup, Input, Label} from 'reactstrap'
 import '@styles/base/pages/page-auth.scss'
 import {useForm} from 'react-hook-form'
 import classnames from "classnames"
-import axios from "axios"
 import {toast} from 'react-toastify'
-import Toaster from "@components/toaster"
 import Logo from "@components/logo"
-import {server} from "@utils"
+import { login as userLogin, reset } from '@store/reducers/auth'
+import { useSelector, useDispatch } from 'react-redux'
+import { useEffect } from 'react'
 
 const Login = () => {
+    const dispatch = useDispatch()
+    const history = useHistory()
     const {register, errors, handleSubmit} = useForm()
 
+    const { user, isLoading, isError, isSuccess, message } = useSelector(
+      (state) => state.auth
+    )
+      useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
+
+    // Redirect when logged in
+    if (isSuccess || user) {
+      history.push('/dashboard')
+    }
+
+    dispatch(reset())
+  }, [isError, isSuccess, user, message, dispatch])
+
     const onSubmit = async data => {
-        try {
-            const response = await axios({
-                url: `${server}login`,
-                method: 'POST',
-                data
-            })
-            console.log(response.data)
-        } catch (err) {
-            toast.error(<Toaster status='error' message={err.response.data.message}/>, {hideProgressBar: false})
-        }
+        dispatch(userLogin(data))
     }
 
     return (
