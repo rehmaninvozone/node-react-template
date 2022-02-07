@@ -5,6 +5,7 @@ import '@styles/base/pages/page-auth.scss'
 import {useForm} from 'react-hook-form'
 import classnames from "classnames"
 import {toast} from 'react-toastify'
+import Toaster from "@components/toaster"
 import Logo from "@components/logo"
 import { reset } from '@store/reducers/auth'
 import { login as userLogin } from '@store/actions/auth'
@@ -21,7 +22,7 @@ const Login = () => {
     )
       useEffect(() => {
     if (isError) {
-      toast.error(message)
+      toast.error(<Toaster status='error' message={message}/>)
     }
 
     // Redirect when logged in

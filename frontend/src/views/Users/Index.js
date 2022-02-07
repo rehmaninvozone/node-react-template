@@ -1,23 +1,24 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState, useCallback } from 'react'
 import Breadcrumbs from '@components/breadcrumbs'
 import { MoreVertical, Edit, Trash } from 'react-feather'
 import { Row, Col, Card, Table, UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap'
 import axios from 'axios'
 import {getUserData} from '@utils'
 import {toast} from 'react-toastify'
+import Toaster from "@components/toaster"
 
 const Tables = () => {
     const [users, setUsers] = useState([])
      const token = getUserData().token
 
-     const fetchUsers = async () => {
+     const fetchUsers = useCallback(async () => {
         const response = await axios({
             url: 'users',
             method: 'GET',
             headers: {Authorization : `Bearer ${token}`} 
         })
         setUsers(response.data.users)
-       }
+      }, [])
 
        const onDelete = async (id) => {
             const response = await axios({
@@ -25,8 +26,9 @@ const Tables = () => {
                 method: 'DELETE',
                 headers: {Authorization : `Bearer ${token}`} 
             })
-            toast.success(response.data.message)
-       }
+            setUsers(response.data.users)
+            toast.success(<Toaster status='success' message={response.data.message}/>)
+        }
 
     useEffect(() => {
         fetchUsers()

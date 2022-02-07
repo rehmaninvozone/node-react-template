@@ -5,6 +5,7 @@ import '@styles/base/pages/page-auth.scss'
 import {Button, Card, CardBody, Form, FormFeedback, FormGroup, Input, Label} from 'reactstrap'
 import classnames from "classnames"
 import {toast} from 'react-toastify'
+import Toaster from "@components/toaster"
 import { useSelector, useDispatch } from 'react-redux'
 import Logo from "@components/logo"
 import { reset } from '@store/reducers/auth'   
@@ -20,7 +21,7 @@ const Register = () => {
  const { user, isError, isSuccess, message } = useSelector((state) => state.auth)
     useEffect(() => {
         if (isError) {
-          toast.error(message)
+            toast.error(<Toaster status='error' message={message}/>)
         }
     
         if (isSuccess || user) {
