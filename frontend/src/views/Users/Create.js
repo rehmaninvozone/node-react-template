@@ -1,41 +1,33 @@
 import { Fragment } from 'react'
+import { useHistory } from 'react-router-dom'
 import Breadcrumbs from '@components/breadcrumbs'
-import { Check } from 'react-feather'
 import { toast } from 'react-toastify'
-import Avatar from '@components/avatar'
+import Toaster from "@components/toaster"
 import { useForm } from 'react-hook-form'
+import {getUserData} from '@utils'
 import {Card, CardBody, Button, Form, FormGroup, Label, Input, FormFeedback} from 'reactstrap'
 import InputPasswordToggle from '@components/input-password-toggle'
 import classnames from "classnames"
-
-const SuccessToast = () => {
-    return (
-        <Fragment>
-            <div className='toastify-header'>
-                <div className='title-wrapper'>
-                    <Avatar size='sm' color='success' icon={<Check size={12} />} />
-                    <h6 className='toast-title'>Form Submitted!</h6>
-                </div>
-            </div>
-        </Fragment>
-    )
-}
+import axios from 'axios'
 
 const AddUser = () => {
     const { register, errors, handleSubmit } = useForm()
-
-    const  onSubmit  = data => {
-        fetch('http://localhost:8000/signup', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json'
+    const token = getUserData().token
+    const history = useHistory()
+    
+    const  onSubmit  = async data => {
+            try {
+                const response = await axios({
+                    url: 'create',
+                    method: 'POST',
+                    headers: {Authorization : `Bearer ${token}`},
+                    data
+                })
+                history.push('/users')
+                toast.success(<Toaster status='success' message={response.data.message}/>)
+            } catch (err) {
+                toast.error(<Toaster status='error' message={err.response.data.message}/>)
             }
-        }).then(response => {
-            if (response.ok) {
-                toast.success(<SuccessToast/>, { hideProgressBar: false })
-            }
-        })
     }
     return (
         <Fragment>

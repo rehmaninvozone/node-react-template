@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs');
+
 const { setErrorCode } = require('../utils/error');
 const { User } = require('../models/');
 
@@ -5,6 +7,29 @@ exports.index = async (req, res, next) => {
   try {
     let users = await User.findAll({ attributes: { exclude: ['password'] } });
     res.status(200).json({ users });
+  } catch (err) {
+    setErrorCode(err, next);
+  }
+};
+
+
+exports.store = async (req, res, next) => {
+  const { name, email, password } = req.body;
+  try {
+    let hashedPassword = await bcrypt.hash(password, 12);
+    await User.create({ name, email, password: hashedPassword });
+    res.status(201).json({ message: 'User created!' });
+  } catch (err) {
+    setErrorCode(err, next);
+  }
+};
+
+exports.update = async (req, res, next) => {
+  const { name, email, password } = req.body;
+  try {
+    let hashedPassword = await bcrypt.hash(password, 12);
+    await User.create({ name, email, password: hashedPassword });
+    res.status(201).json({ message: 'User created!' });
   } catch (err) {
     setErrorCode(err, next);
   }

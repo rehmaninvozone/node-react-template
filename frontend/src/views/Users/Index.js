@@ -21,6 +21,7 @@ const Tables = () => {
       }, [])
 
        const onDelete = async (id) => {
+           try {
             const response = await axios({
                 url: `users/${id}`,
                 method: 'DELETE',
@@ -28,6 +29,9 @@ const Tables = () => {
             })
             setUsers(response.data.users)
             toast.success(<Toaster status='success' message={response.data.message}/>)
+           } catch (err) {
+            toast.error(<Toaster status='error' message={err.response.data.message}/>)
+           }
         }
 
     useEffect(() => {
