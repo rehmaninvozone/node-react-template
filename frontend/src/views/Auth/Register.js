@@ -7,7 +7,8 @@ import classnames from "classnames"
 import {toast} from 'react-toastify'
 import { useSelector, useDispatch } from 'react-redux'
 import Logo from "@components/logo"
-import { register as userRegister, reset } from '@store/reducers/auth'   
+import { reset } from '@store/reducers/auth'   
+import { register as userRegister } from '@store/actions/auth'
 import { useEffect } from 'react'
 
 const Register = () => {

@@ -7,7 +7,8 @@ import Avatar from '@components/avatar'
 
 // ** Store & Actions
 import { useDispatch } from 'react-redux'
-import { logout, reset } from '@store/reducers/auth'
+import { reset } from '@store/reducers/auth'
+import { logout } from '@store/actions/auth'
 
 // ** Third Party Components
 import { UncontrolledDropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap'

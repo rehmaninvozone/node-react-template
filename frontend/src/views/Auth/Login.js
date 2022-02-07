@@ -6,7 +6,8 @@ import {useForm} from 'react-hook-form'
 import classnames from "classnames"
 import {toast} from 'react-toastify'
 import Logo from "@components/logo"
-import { login as userLogin, reset } from '@store/reducers/auth'
+import { reset } from '@store/reducers/auth'
+import { login as userLogin } from '@store/actions/auth'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 
