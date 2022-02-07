@@ -42,8 +42,3 @@ exports.postSignup = async (req, res, next) => {
     setErrorCode(err, next);
   }
 };
-
-exports.postLogout = (req, res, next) => {
-  req.headers.authorization = '';
-  res.status(200).json();
-};

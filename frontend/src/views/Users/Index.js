@@ -1,9 +1,36 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import Breadcrumbs from '@components/breadcrumbs'
 import { MoreVertical, Edit, Trash } from 'react-feather'
-import { Row, Col, Card, Table, Badge, UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap'
+import { Row, Col, Card, Table, UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap'
+import axios from 'axios'
+import {getUserData} from '@utils'
+import {toast} from 'react-toastify'
 
 const Tables = () => {
+    const [users, setUsers] = useState([])
+     const token = getUserData().token
+
+     const fetchUsers = async () => {
+        const response = await axios({
+            url: 'users',
+            method: 'GET',
+            headers: {Authorization : `Bearer ${token}`} 
+        })
+        setUsers(response.data.users)
+       }
+
+       const onDelete = async (id) => {
+            const response = await axios({
+                url: `users/${id}`,
+                method: 'DELETE',
+                headers: {Authorization : `Bearer ${token}`} 
+            })
+            toast.success(response.data.message)
+       }
+
+    useEffect(() => {
+        fetchUsers()
+    }, [fetchUsers])
 
     return (
         <Fragment>
@@ -20,27 +47,30 @@ const Tables = () => {
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
+                         {users.map((user) => (
+                            <tr key={user.id}>
                                 <td>
-                                    Ali
+                                   {user.name}
                                 </td>
-                                <td>Peter Charles</td>
+                                <td>{user.email}</td>
                                 <td>
                                     <UncontrolledDropdown>
                                         <DropdownToggle className='icon-btn hide-arrow' color='transparent' size='sm' caret>
                                             <MoreVertical size={15} />
                                         </DropdownToggle>
                                         <DropdownMenu right>
-                                            <DropdownItem href='/' onClick={e => e.preventDefault()}>
+                                            <DropdownItem className='w-100' onClick={e => e.preventDefault()}>
                                                 <Edit className='mr-50' size={15} /> <span className='align-middle'>Edit</span>
                                             </DropdownItem>
-                                            <DropdownItem href='/' onClick={e => e.preventDefault()}>
+                                            
+                                            <DropdownItem className='w-100' onClick={() => onDelete(user.id)}>
                                                 <Trash className='mr-50' size={15} /> <span className='align-middle'>Delete</span>
                                             </DropdownItem>
                                         </DropdownMenu>
                                     </UncontrolledDropdown>
                                 </td>
                             </tr>
+                         ))}  
                             </tbody>
                         </Table>
                     </Card>

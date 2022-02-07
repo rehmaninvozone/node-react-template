@@ -8,13 +8,15 @@ const { sequelize } = require('./models');
 const app = express();
 
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
 
 app.use(bodyParser.json()); // application/json
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false }));
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use(authRoutes);
+app.use('/users', userRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
