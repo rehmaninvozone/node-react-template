@@ -1,4 +1,4 @@
-import {Link, useNavigate, useHistory} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import {useForm} from 'react-hook-form'
 import InputPasswordToggle from '@components/input-password-toggle'
 import '@styles/base/pages/page-auth.scss'
