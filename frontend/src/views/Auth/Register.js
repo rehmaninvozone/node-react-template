@@ -1,4 +1,4 @@
-import {Link, useHistory} from 'react-router-dom'
+import {Link, useNavigate, useHistory} from 'react-router-dom'
 import {useForm} from 'react-hook-form'
 import InputPasswordToggle from '@components/input-password-toggle'
 import '@styles/base/pages/page-auth.scss'
@@ -14,25 +14,20 @@ const Register = () => {
 
  const dispatch = useDispatch()
  const history = useHistory()
-
-  const { user, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  )
-  useEffect(() => {
-      
-    if (isError) {
-      toast.error(message)
-    }
-
-    // Redirect when logged in
-    if (isSuccess || user) {
-     history.push('/dashboard')
-    }
-
-    dispatch(reset())
-  }, [isError, isSuccess, user, message, dispatch])
-
-    const {register, errors, handleSubmit} = useForm()
+ 
+ const {register, errors, handleSubmit} = useForm()
+ const { user, isError, isSuccess, message } = useSelector((state) => state.auth)
+    useEffect(() => {
+        if (isError) {
+          toast.error(message)
+        }
+    
+        if (isSuccess || user) {
+            history.push('/dashboard')
+        }
+    
+        dispatch(reset())
+      }, [isError, isSuccess, user, message, dispatch])
 
     const onSubmit = data => {
          dispatch(userRegister(data))

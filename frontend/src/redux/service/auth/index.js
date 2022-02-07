@@ -5,7 +5,7 @@ const register = async (userData) => {
   const response = await axios.post('signup', userData)
 
   if (response.data) {
-    localStorage.setItem('signup', JSON.stringify(response.data))
+    localStorage.setItem('user', JSON.stringify(response.data))
   }
   return response.data
 }
