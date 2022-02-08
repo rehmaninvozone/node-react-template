@@ -9,7 +9,9 @@ router.get('/', isAuth, userController.index);
 
 router.post('/create', isAuth, storeUserValidator(), userController.store);
 
-router.post('/edit:id', isAuth, userController.update);
+router.get('/show/:id', isAuth, userController.show);
+
+router.put('/update/:id', isAuth, userController.update);
 
 router.delete('/:id', isAuth, userController.destroy);
 

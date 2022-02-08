@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useState, useCallback } from 'react'
+import { Link } from "react-router-dom"
 import Breadcrumbs from '@components/breadcrumbs'
 import { MoreVertical, Edit, Trash } from 'react-feather'
 import { Row, Col, Card, Table, UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap'
@@ -7,7 +8,7 @@ import {getUserData} from '@utils'
 import {toast} from 'react-toastify'
 import Toaster from "@components/toaster"
 
-const Tables = () => {
+const Users = () => {
     const [users, setUsers] = useState([])
      const token = getUserData().token
 
@@ -65,10 +66,11 @@ const Tables = () => {
                                             <MoreVertical size={15} />
                                         </DropdownToggle>
                                         <DropdownMenu right>
-                                            <DropdownItem className='w-100' onClick={e => e.preventDefault()}>
+                                            <Link to={`users/edit/${user.id}`}>
+                                            <DropdownItem className='w-100'>
                                                 <Edit className='mr-50' size={15} /> <span className='align-middle'>Edit</span>
                                             </DropdownItem>
-                                            
+                                            </Link> 
                                             <DropdownItem className='w-100' onClick={() => onDelete(user.id)}>
                                                 <Trash className='mr-50' size={15} /> <span className='align-middle'>Delete</span>
                                             </DropdownItem>
@@ -86,4 +88,4 @@ const Tables = () => {
     )
 }
 
-export default Tables
+export default Users

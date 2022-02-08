@@ -24,12 +24,22 @@ exports.store = async (req, res, next) => {
   }
 };
 
-exports.update = async (req, res, next) => {
-  const { name, email, password } = req.body;
+
+exports.show = async (req, res, next) => {
   try {
-    let hashedPassword = await bcrypt.hash(password, 12);
-    await User.create({ name, email, password: hashedPassword });
-    res.status(201).json({ message: 'User created!' });
+    const id = req.params.id;
+    let user = await User.findOne({where: { id } , attributes: { exclude: ['password'] }});
+    res.status(200).json({ user });
+  } catch (err) {
+    setErrorCode(err, next);
+  }
+};
+
+exports.update = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    User.update(req.body, { where: { id } })
+    res.status(201).json({ message: 'User updated!' });
   } catch (err) {
     setErrorCode(err, next);
   }
