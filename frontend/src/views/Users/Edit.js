@@ -40,6 +40,7 @@ const EditUser = () => {
 
     const  onSubmit  = async (data) => {
             try {
+                console.log(data)
                 const response = await axios({
                     url:`/users/update/${id}`,
                     method: 'PUT',
@@ -49,8 +50,7 @@ const EditUser = () => {
                 history.push('/users')
                 toast.success(<Toaster status='success' message={response.data.message}/>)
             } catch (err) {
-                console.log(err)
-                toast.error(<Toaster status='error' message={err.response}/>)
+                toast.error(<Toaster status='error' message={err.response.data.message}/>)
             }
     }
     return (
@@ -93,9 +93,8 @@ const EditUser = () => {
                                 name='password'
                                 // value={password}
                                 className='input-group-merge'
-                                className={classnames({ 'is-invalid': errors['password'] })}
-                                innerRef={register({ required: 'Password field is required' })}
-                            />
+                                innerRef={register()}
+                              />
                             {errors && errors.password && <FormFeedback>{errors.password.message}</FormFeedback>}
                         </FormGroup>
                         <FormGroup>
@@ -105,8 +104,7 @@ const EditUser = () => {
                                 name='confirmPassword'
                                 // value={confirmPassword}
                                 className='input-group-merge'
-                                className= { classnames({ 'is-invalid': errors['confirmPassword'] })}
-                                innerRef={register({ required: 'Confirm Password field is required'})}
+                                innerRef={register()}
                             />
                             {errors && errors.confirmPassword && <FormFeedback>{errors.confirmPassword.message}</FormFeedback>}
                         </FormGroup>

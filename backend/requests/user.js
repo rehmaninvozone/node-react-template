@@ -3,6 +3,8 @@ const { validateRequest } = require('../utils/validateRequest');
 
 const { throwError } = require('../utils/error');
 const { User } = require('../models/');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 exports.storeUserValidator = () => {
   return [
@@ -29,6 +31,41 @@ exports.storeUserValidator = () => {
     body('confirmPassword')
       .notEmpty()
       .withMessage('confirm password is required.')
+      .trim()
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throwError('Passwords have to match with confirm password!', 422);
+        }
+        return true;
+      }),
+    validateRequest,
+  ];
+};
+
+exports.updateUserValidator = () => {
+  return [
+    body('name').notEmpty().withMessage('name is required').trim(),
+    body('email')
+      .notEmpty()
+      .withMessage('email is required')
+      .isEmail()
+      .withMessage('Please enter a valid email.')
+      .custom((email, { req }) => {
+        return User.findOne({
+          where: {
+            email,
+           id: { [Op.not]: req.params.id },
+          },
+        }).then((user) => {
+          if (user) {
+            return Promise.reject('E-mail already in use');
+          }
+        });
+      })
+      .normalizeEmail(),
+      body('password')
+      .trim(),
+    body('confirmPassword')
       .trim()
       .custom((value, { req }) => {
         if (value !== req.body.password) {

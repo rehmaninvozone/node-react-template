@@ -1,7 +1,7 @@
 const express = require('express');
 const isAuth = require('../middleware/isAuth');
 const userController = require('../controllers/users');
-const { storeUserValidator } = require('../requests/user');
+const { storeUserValidator, updateUserValidator } = require('../requests/user');
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ router.post('/create', isAuth, storeUserValidator(), userController.store);
 
 router.get('/show/:id', isAuth, userController.show);
 
-router.put('/update/:id', isAuth, userController.update);
+router.put('/update/:id', isAuth, updateUserValidator(), userController.update);
 
 router.delete('/:id', isAuth, userController.destroy);
 
